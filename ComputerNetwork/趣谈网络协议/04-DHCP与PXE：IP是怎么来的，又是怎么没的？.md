@@ -22,8 +22,9 @@
 **DHCP的方式就相当于租房。你不用装修，都是帮你配置好的。你暂时用一下，用完退租就可以了。**  
 
 ## 解析DHCP的工作方式
-```
-flowchart TD
+> 当一台机器新加入一个网络的时候，肯定一脸懵，啥情况都不知道，只知道自己的MAC地址。怎么办？先吼一句，我来啦，有人吗？这时候的沟通基本靠“吼”。这一步，我们称为**DHCP Discover**
+```mermaid
+flowchart LR
     A[我的MAC是这个，
 我还没有IP] -->|BOOTP头| B[Boot request]
     B -->|UDP头| C[源端口：68
@@ -33,3 +34,19 @@ flowchart TD
      D -->|MAC头| E[新人的MAC
 广播MAC：（ff:ff:ff:ff:ff:ff）]
 ```
+
+> 一个网络管理员在网络里面配置了DHCP Server，他就相当于IP的管理员。  
+> 因为MAC唯一，IP管理员知道他是一个新人，需要租给他一个IP地址 ===> **DHCP Offer**的过程  
+> DHCP Server为此客户保留为它提供的IP地址，从而不会为其他DHCP客户分配此IP地址  
+- :arrow_down:DHCP Offer的格式
+  ```mermaid
+  flowchart LR
+    A[这是你的MAC，
+   我分配了这个IP，租给你，你看如何？] -->|BOOTP头| B[Boot reply]
+    B -->|UDP头| C[源端口：67
+   目标端口：68]
+     C -->|IP头| D[DHCP Server IP：192.168.1.2
+   广播IP：255.255.255.255]
+     D -->|MAC头| E[DHCP Server的MAC
+   广播MAC：（ff:ff:ff:ff:ff:ff）]
+   ```
